@@ -1,6 +1,5 @@
 # app/models/servico.py
 from ..extensions import db
-from datetime import datetime
 from typing import Dict, Any
 
 class Servico(db.Model):
@@ -12,14 +11,10 @@ class Servico(db.Model):
     valor_hora = db.Column(db.Float)
     valor_dia = db.Column(db.Float)
     ativo = db.Column(db.Boolean, default=True)
-    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relacionamentos
-    agendamentos = db.relationship("Agendamento", back_populates="servico")
-    
-    # Modificando este relacionamento para resolver o conflito
-    agendamentos_servicos = db.relationship("AgendamentoServico", 
-                                            back_populates="servico")
+    # Não criar relacionamento direto com Agendamento, apenas através de AgendamentoServico
+    agendamentos_servicos = db.relationship("AgendamentoServico", back_populates="servico")
     
     def to_dict(self) -> Dict[str, Any]:
         """Converte o objeto Servico para um dicionário."""
@@ -29,9 +24,8 @@ class Servico(db.Model):
             'descricao': self.descricao,
             'valor_hora': self.valor_hora,
             'valor_dia': self.valor_dia,
-            'ativo': self.ativo,
-            'data_criacao': self.data_criacao.strftime('%d/%m/%Y %H:%M:%S') if self.data_criacao else None
+            'ativo': self.ativo
         }
     
     def __repr__(self) -> str:
-        return f'<Servico {self.nome_servico}>'
+        return f'<Servico {self.id_servico}: {self.nome_servico}>'

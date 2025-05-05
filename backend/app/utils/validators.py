@@ -223,3 +223,74 @@ def validate_pagamento(data: Dict[str, Any]) -> Tuple[bool, List[str]]:
             errors.append("Data de pagamento inválida. Use o formato DD/MM/AAAA HH:MM")
     
     return len(errors) == 0, errors
+
+# Funções adicionais para validação de agendamento e pagamento
+
+def validate_required_fields(data: Dict[str, Any], fields: List[str]) -> List[str]:
+    """Verifica se todos os campos obrigatórios estão presentes e não vazios."""
+    missing = []
+    for field in fields:
+        if field not in data or data[field] is None or data[field] == "":
+            missing.append(field)
+    return missing
+
+def validate_datetime_format(date_str: str) -> bool:
+    """Valida se a string de data está no formato DD/MM/YYYY HH:MM."""
+    try:
+        datetime.strptime(date_str, "%d/%m/%Y %H:%M")
+        return True
+    except ValueError:
+        return False
+
+def validate_payment_type(payment_type: str, valid_types: List[str]) -> bool:
+    """Valida se o tipo de pagamento é válido."""
+    return payment_type.lower() in [t.lower() for t in valid_types]
+
+def sanitize_input(input_str: str) -> str:
+    """Sanitiza entrada de texto para prevenir injeção."""
+    if not input_str:
+        return ""
+    # Remove caracteres potencialmente perigosos
+    sanitized = re.sub(r'[<>&\'"()]', '', input_str)
+    return sanitized
+
+def validate_date_range(start_date: datetime, end_date: datetime) -> Tuple[bool, Optional[str]]:
+    """Valida se a data de início é anterior à data de fim."""
+    if start_date >= end_date:
+        return False, "A data de início deve ser anterior à data de fim"
+    return True, None
+
+def validate_positive_number(value: float) -> bool:
+    """Valida se o número é positivo."""
+    try:
+        return float(value) > 0
+    except (ValueError, TypeError):
+        return False
+
+def validate_service_id(service_id: int, valid_services: List[int]) -> bool:
+    """Valida se o ID do serviço está na lista de serviços válidos."""
+    return service_id in valid_services
+
+def validate_service_hours(hora: int, minuto: int) -> bool:
+    """Valida se o horário está dentro das regras (hora em ponto ou meia hora)."""
+    return 0 <= hora < 24 and minuto in [0, 30]
+
+def validate_service_datetime(date_str: str) -> Tuple[bool, Optional[str]]:
+    """
+    Valida se a string de data/hora segue o formato correto e as regras de horário.
+    Retorna (sucesso, mensagem de erro opcional)
+    """
+    try:
+        dt = datetime.strptime(date_str, "%d/%m/%Y %H:%M")
+        
+        # Verifica se o minuto é 0 ou 30
+        if dt.minute not in [0, 30]:
+            return False, "Os horários devem ser na hora exata ou na meia hora (ex: 09:00 ou 09:30)"
+        
+        # Verifica se a data não é no passado
+        if dt < datetime.now():
+            return False, "A data não pode estar no passado"
+        
+        return True, None
+    except ValueError:
+        return False, "Formato de data inválido. Use o formato DD/MM/YYYY HH:MM (ex: 01/06/2025 14:30)"
