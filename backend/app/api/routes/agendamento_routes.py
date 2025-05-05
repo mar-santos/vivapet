@@ -189,35 +189,29 @@ def agendar_servico():
         
         data = request.get_json()
         
-        # Convertendo campos data_entrada/data_saida para data_inicio/data_fim
+        # Converte campos se necessário
         if 'data_entrada' in data and 'data_saida' in data:
             data['data_inicio'] = data.pop('data_entrada')
             data['data_fim'] = data.pop('data_saida')
         
-        # Validação dos campos obrigatórios
+        # Validação
         required_fields = ['id_pet', 'id_servico', 'data_inicio', 'data_fim']
         missing_fields = validate_required_fields(data, required_fields)
         if missing_fields:
             return error_response(f"Campos obrigatórios faltando: {', '.join(missing_fields)}", 400)
         
-        # Verificar se o pet existe e pertence ao usuário (exceto admin)
+        # Verificar pet
         pet = Pet.query.get(data['id_pet'])
         if not pet:
             return error_response("Pet não encontrado", 404)
         
-        if hasattr(pet, 'ativo') and not pet.ativo:
-            return error_response("Este pet está inativo", 400)
-            
         if not usuario.is_admin and pet.id_usuario != current_user_id:
             return error_response("Este pet não pertence ao usuário atual", 403)
         
-        # Verificar se o serviço existe e está ativo
+        # Verificar serviço
         servico = Servico.query.get(data['id_servico'])
         if not servico:
             return error_response("Serviço não encontrado", 404)
-            
-        if hasattr(servico, 'ativo') and not servico.ativo:
-            return error_response("Este serviço não está mais disponível", 400)
         
         # Validar formatos de data/hora
         format_inicio = validate_datetime_format(data['data_inicio'])
@@ -228,34 +222,31 @@ def agendar_servico():
         if not format_fim:
             return error_response("Formato de data de fim inválido. Use DD/MM/YYYY HH:MM", 400)
         
-        # Calcular valor do serviço
+        # Calcular valor
         valor, erro = calcular_valor_servico(data['id_servico'], data['data_inicio'], data['data_fim'])
         if erro:
             return error_response(erro, 400)
         
-        # Converter strings para objetos datetime para o banco
+        # Criar objeto agendamento
         data_inicio = datetime.strptime(data['data_inicio'], '%d/%m/%Y %H:%M')
         data_fim = datetime.strptime(data['data_fim'], '%d/%m/%Y %H:%M')
         
-        # Criar novo agendamento
+        # Criar novo agendamento - incluindo id_servico
         agendamento = Agendamento(
             id_usuario=current_user_id,
             id_pet=data['id_pet'],
-            data_inicio=data_inicio,    # Nome correto do campo
-            data_fim=data_fim,          # Nome correto do campo
+            id_servico=data['id_servico'],  # Adicionando id_servico aqui
+            data_inicio=data_inicio,
+            data_fim=data_fim,
             observacoes=data.get('observacoes', ''),
             status='agendado',
             valor_total=valor
         )
         
-        # Adicionar campo ativo se existir no modelo
-        if hasattr(Agendamento, 'ativo'):
-            agendamento.ativo = True
-        
         db.session.add(agendamento)
-        db.session.flush()
+        db.session.flush()  # Para obter o ID gerado
         
-        # Criar item de serviço associado
+        # Criar item de serviço
         item_servico = AgendamentoServico(
             id_agendamento=agendamento.id_agendamento,
             id_servico=data['id_servico'],
@@ -267,15 +258,14 @@ def agendar_servico():
         db.session.add(item_servico)
         db.session.commit()
         
-        # Buscar o agendamento completo para retornar
-        agendamento = Agendamento.query.get(agendamento.id_agendamento)
-        
         return success_response(
             data=agendamento.to_dict(),
             message="Agendamento criado com sucesso"
         )
+        
     except ValueError as e:
         db.session.rollback()
+        logger.error(f"Erro de validação: {str(e)}")
         return error_response(f"Erro de validação: {str(e)}", 400)
     except SQLAlchemyError as e:
         db.session.rollback()
@@ -284,4 +274,4 @@ def agendar_servico():
     except Exception as e:
         db.session.rollback()
         logger.error(f"Erro ao agendar serviço: {str(e)}")
-        return error_response(f"Erro ao agendar serviço: {str(e)}", 500)
+        return error_response("Erro ao processar a solicitação", 500)

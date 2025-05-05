@@ -5,6 +5,7 @@ from typing import Dict, Any
 
 class Pagamento(db.Model):
     __tablename__ = 'pagamento'
+    __table_args__ = {'extend_existing': True}  # Adicionado para evitar conflitos
     
     id_pagamento = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_agendamento = db.Column(db.Integer, db.ForeignKey('agendamento.id_agendamento'), nullable=False)
@@ -13,6 +14,7 @@ class Pagamento(db.Model):
     tipo_pagamento = db.Column(db.String(50))  # pix, cartao, boleto, dinheiro
     data_pagamento = db.Column(db.DateTime)
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+    ativo = db.Column(db.Boolean, default=True)
     
     # Relacionamentos
     agendamento = db.relationship("Agendamento", back_populates="pagamentos")

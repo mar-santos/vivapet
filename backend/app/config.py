@@ -50,6 +50,8 @@ class DevelopmentConfig(Config):
     DEBUG = True
     # IMPORTANTE: Configuração para garantir que o reload não afete o JWT
     PROPAGATE_EXCEPTIONS = True
+    # Adicione essa linha para ativar o echo do SQLAlchemy
+    SQLALCHEMY_ECHO = True
 
 class TestingConfig(Config):
     TESTING = True

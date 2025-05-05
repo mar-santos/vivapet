@@ -1,10 +1,9 @@
-# app/models/agendamento_servico.py
 from ..extensions import db
-from datetime import datetime
 from typing import Dict, Any
 
 class AgendamentoServico(db.Model):
     __tablename__ = 'agendamento_servico'
+    __table_args__ = {'extend_existing': True}
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_agendamento = db.Column(db.Integer, db.ForeignKey('agendamento.id_agendamento'), nullable=False)
@@ -12,7 +11,7 @@ class AgendamentoServico(db.Model):
     quantidade = db.Column(db.Integer, default=1)
     valor_unitario = db.Column(db.Float, nullable=False)
     observacoes = db.Column(db.String(255))
-    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+    data_criacao = db.Column(db.DateTime, default=db.func.current_timestamp())
     ativo = db.Column(db.Boolean, default=True)
     
     # Relacionamentos
@@ -36,7 +35,6 @@ class AgendamentoServico(db.Model):
             'valor_unitario': self.valor_unitario,
             'valor_total': self.calcular_valor_total(),
             'observacoes': self.observacoes,
-            'data_criacao': self.data_criacao.strftime('%d/%m/%Y %H:%M:%S') if self.data_criacao else None,
             'ativo': self.ativo,
             'servico': {
                 'id_servico': self.servico.id_servico,
