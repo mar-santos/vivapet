@@ -34,9 +34,9 @@ def login():
     return render_template('pages/login.html')
 
 # Rota para cadastro de usuários
-@app.route('/usuarios/novo')
-def novo_usuario():
-    return render_template('pages/usuarios/novo.html')
+@app.route('/usuarios_cadastrar')
+def usuarios_cadastrar():
+    return render_template('usuarios_cadastrar.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -31,7 +31,8 @@ def get_usuario(id):
 @usuario_bp.route('/usuarios', methods=['POST'])
 def create_usuario():
     """Cria um novo usuário."""
-    data = request.get_json()
+    data = request.form.to_dict()
+    foto_user = request.files.get('foto_user')
     
     # Validação dos dados de entrada
     is_valid, errors = validate_usuario(data)

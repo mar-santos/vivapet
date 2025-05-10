@@ -1,100 +1,75 @@
-{% extends "base.html" %}
-{% block title %}Cadastrar novo usuário - Viva Pet{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Cadastro de Usuário - VivaPet{% endblock %}
+
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='src/css/cadastrar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='src/css/usuarios_cadastrar.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="container cadastro-container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-7 col-md-10">
-            <div class="card shadow cadastro-card">
-                <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Crie sua conta</h2>
-                    <form id="cadastroForm" autocomplete="off">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="username" class="form-label">Username *</label>
-                                <input type="text" class="form-control" id="username" name="username" required maxlength="50">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="nome_user" class="form-label">Nome completo *</label>
-                                <input type="text" class="form-control" id="nome_user" name="nome_user" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label">E-mail *</label>
-                                <input type="email" class="form-control" id="email" name="email" required maxlength="150">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="cpf" class="form-label">CPF *</label>
-                                <input type="text" class="form-control" id="cpf" name="cpf" required maxlength="15" pattern="[\d.-]+">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="cep" class="form-label">CEP</label>
-                                <input type="text" class="form-control" id="cep" name="cep" maxlength="9">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="telefone" class="form-label">Telefone</label>
-                                <input type="text" class="form-control" id="telefone" name="telefone" maxlength="15">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="pets" class="form-label">Pets <span class="small">(separados por vírgula)</span></label>
-                                <input type="text" class="form-control" id="pets" name="pets" placeholder="Rex, Bela, Tobby">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="senha" class="form-label">Senha *</label>
-                                <input type="password" class="form-control" id="senha" name="senha" required minlength="6">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn viva-btn-destaque mt-4 w-100">Cadastrar</button>
-                        <div id="cadastroMessage" class="mt-3"></div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<div class="vivapet-cadastro-bg d-flex align-items-center justify-content-center">
+  <div class="vivapet-cadastro-card">
+    <div class="vivapet-cadastro-header text-center">
+      <div class="vivapet-cadastro-logo">
+        <img src="{{ url_for('static', filename='src/img/fi-rr-paw1.svg') }}" alt="Logo" class="logo-img">
+      </div>
+      <div class="vivapet-cadastro-title">Bem-vindo ao Viva Pet!</div>
+      <div class="vivapet-cadastro-desc">Crie sua conta para acessar todos os nossos serviços</div>
     </div>
+    <form id="usuariosForm" enctype="multipart/form-data" autocomplete="off" class="vivapet-cadastro-form">
+      <div class="avatar-upload text-center mb-3">
+        <label for="foto_user" class="avatar-label">
+          <img src="{{ url_for('static', filename='src/assets/images/imagem_usuario.png') }}" id="avatarPreview" class="avatar-img mb-2" alt="Foto do usuário">
+          <div class="avatar-btn">Clique para escolher foto</div>
+        </label>
+        <input type="file" id="foto_user" name="foto_user" accept="image/*" class="d-none">
+      </div>
+      <div class="row g-2">
+        <div class="col-12 vivapet-field">
+          <input type="text" id="username" name="username" class="form-control" placeholder="Username (login)*" maxlength="80" required>
+        </div>
+        <div class="col-12 vivapet-field">
+          <input type="text" id="nome_user" name="nome_user" class="form-control" placeholder="Nome completo*" maxlength="100" required>
+        </div>
+        <div class="col-12 vivapet-field">
+          <input type="text" id="cpf" name="cpf" class="form-control" placeholder="CPF*" maxlength="14" required pattern="\d{11}|\d{3}\.\d{3}\.\d{3}-\d{2}">
+        </div>
+        <div class="col-12 vivapet-field">
+          <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Endereço*" maxlength="255" required>
+        </div>
+        <div class="col-12 vivapet-field">
+          <input type="text" id="cep" name="cep" class="form-control" placeholder="CEP*" maxlength="9" required>
+        </div>
+        <div class="col-12 vivapet-field">
+          <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="Telefone*" maxlength="20" required>
+        </div>
+        <div class="col-12 vivapet-field">
+          <input type="email" id="email" name="email" class="form-control" placeholder="Email*" maxlength="120" required>
+        </div>
+        <!-- >>>>>>>> ADICIONE O CAMPO DE PETS AQUI <<<<<<<< -->
+        <div class="col-12 vivapet-field">
+          <input type="text" id="pets" name="pets" class="form-control"
+                 placeholder="Nome dos pets (separe por vírgulas se for mais de um)">
+        </div>
+        <!-- >>>>>>>> FINAL DO CAMPO DE PETS <<<<<<<< -->
+        <div class="col-12 vivapet-field">
+          <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha*" minlength="6" required autocomplete="new-password">
+        </div>
+        <!-- Ativo e Admin -->
+        <div class="col-12 d-flex gap-3 align-items-center mb-2">
+          <div>
+            <input type="checkbox" id="ativo" name="ativo" class="form-check-input" checked>
+            <label for="ativo" class="form-check-label">Ativo</label>
+          </div>
+          <div>
+            <input type="checkbox" id="is_admin" name="is_admin" class="form-check-input">
+            <label for="is_admin" class="form-check-label">Administrador</label>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="vivapet-btn w-100 mt-2">Cadastrar</button>
+      <div id="message" class="msg-feedback mt-3"></div>
+    </form>
+  </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-document.getElementById('cadastroForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const messageDiv = document.getElementById('cadastroMessage');
-    messageDiv.innerHTML = '';
-
-    const payload = {
-        username: document.getElementById('username').value.trim(),
-        nome_user: document.getElementById('nome_user').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        cpf: document.getElementById('cpf').value.trim(),
-        cep: document.getElementById('cep').value.trim(),
-        telefone: document.getElementById('telefone').value.trim(),
-        pets: document.getElementById('pets').value.trim(),
-        senha: document.getElementById('senha').value
-    };
-
-    try {
-        const resp = await fetch("{{ url_for('usuarios.create_usuario') }}", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const data = await resp.json();
-        if (resp.ok) {
-            messageDiv.className = 'alert alert-success';
-            messageDiv.innerText = 'Cadastro realizado com sucesso!';
-            document.getElementById('cadastroForm').reset();
-        } else {
-            messageDiv.className = 'alert alert-danger';
-            messageDiv.innerText = (data && data.errors)
-                ? Object.values(data.errors).join(' | ')
-                : (data.message || 'Erro ao cadastrar usuário');
-        }
-    } catch (error) {
-        messageDiv.className = 'alert alert-danger';
-        messageDiv.innerText = 'Erro inesperado ao cadastrar.';
-    }
-});
-</script>
+<script src="{{ url_for('static', filename='src/js/usuarios_cadastrar.js') }}"></script>
 {% endblock %}
