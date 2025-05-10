@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Home | Viva Pet{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='src/css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="home-content">
+    <section class="viva-hero text-center">
+        <div class="viva-hero-logo">
+            <div class="ellipse">
+                <img src="{{ url_for('static', filename='img/fi-rr-paw1.svg') }}" alt="Pata" class="paw-hero">
+            </div>
+            <h1>Bem-vindo ao VivaPet</h1>
+            <p class="subtitle">O melhor lugar para cuidar de seu pet!</p>
+        </div>
+        <!-- Botões + Imagem dos Pets lado a lado (desktop), empilhados (mobile) -->
+        <div class="viva-cta-row d-flex align-items-center justify-content-center flex-wrap flex-md-nowrap my-4">
+            <div class="viva-cta-col text-center mb-3 mb-md-0">
+                <a href="/login" class="btn viva-btn-login me-3">Login</a>
+                <a href="/api/cadastro" class="btn viva-btn-cadastro">Cadastrar-se</a>
+            </div>
+            <div class="viva-cta-col viva-img-right ms-md-5">
+                <img src="{{ url_for('static', filename='src/assets/images/3719277.png') }}" alt="Pets felizes" class="pets-img-cta">
+            </div>
+        </div>
+        <div class="viva-motivacional mt-4 mb-2 text-center">
+            <span>Seu pet merece o melhor cuidado, carinho e segurança. Viva experiências incríveis com a nossa equipe!</span>
+        </div>
+        <div class="viva-promo-section text-center">
+            <div class="promo-text">
+                <h3 class="mb-2">Oferecemos serviços de qualidade para o seu animal de estimação.</h3>
+            </div>
+        </div>
+        <hr class="viva-separator">
+    </section>
+
+    <div class="row viva-services justify-content-center mb-5">
+        <!-- Cãominhadas -->
+        <div class="col-md-3 viva-service-card">
+            <div class="card h-100 service-catwalk">
+                <div class="card-body">
+                    <h4 class="card-title">Cãominhadas</h4>
+                    <p class="card-text">
+                        As cãominhadas têm se tornado cada vez mais populares em áreas urbanas, fortalecendo o vínculo entre humanos e pets, promovendo um estilo de vida mais saudável para ambos.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Creche -->
+        <div class="col-md-3 viva-service-card">
+            <div class="card h-100 service-creche">
+                <div class="card-body">
+                    <h4 class="card-title">Creche</h4>
+                    <p class="card-text">
+                        A creche para pets oferece um ambiente seguro e estimulante para cães enquanto os tutores trabalham, com atenção personalizada e atividades sob supervisão profissional.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Hospedagem -->
+        <div class="col-md-3 viva-service-card">
+            <div class="card h-100 service-hospedagem">
+                <div class="card-body">
+                    <h4 class="card-title">Hospedagem</h4>
+                    <p class="card-text">
+                        Espaço confortável, seguro e com supervisão constante para seu pet se sentir em casa enquanto você viaja.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Segurança -->
+        <div class="col-md-3 viva-service-card">
+            <div class="card h-100 service-seguranca">
+                <div class="card-body">
+                    <h4 class="card-title">Segurança</h4>
+                    <p class="card-text">
+                        Segurança total para você e seu pet. Atendimento especializado todos os dias para garantir bem-estar e tranquilidade em todas as situações.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

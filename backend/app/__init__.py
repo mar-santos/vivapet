@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from .config import config
 from .api.routes import home_routes
+from .api.routes import usuario_routes
 
 # Importamos db das extensões para exportar para outros módulos
 from .extensions import db, jwt

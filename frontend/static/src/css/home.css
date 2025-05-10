@@ -1,0 +1,122 @@
+.viva-hero-btns {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+}
+
+.viva-btn-login,
+.viva-btn-cadastro {
+    font-family: var(--font-bold, 'Open Sans', Arial, sans-serif);
+    font-size: 1.13rem;
+    padding: 9px 26px;
+    border-radius: 6px;
+    border-width: 2px;
+    font-weight: 700;
+    box-shadow: 0 1px 8px rgba(121,133,142,0.12);
+    transition: background .18s, color .18s, border-color .18s;
+}
+
+.viva-btn-login {
+    background: #fff;
+    border: 2px solid var(--foundation-primary-blue-400, #413653);
+    color: var(--foundation-primary-blue-400, #413653);
+}
+
+.viva-btn-login:hover, .viva-btn-login:focus {
+    background: var(--foundation-primary-blue-400, #413653);
+    color: #fff;
+}
+
+.viva-btn-cadastro {
+    background: var(--foundation-warning-warning-200, #f8e4a4);
+    border: 2px solid var(--foundation-warning-warning-700, #aa8c28);
+    color: #7a4e13;
+}
+
+.viva-btn-cadastro:hover, .viva-btn-cadastro:focus {
+    background: #fffde8;
+    color: var(--foundation-warning-warning-900, #645318);
+    border-color: var(--foundation-warning-warning-900, #645318);
+}
+
+.viva-motivacional {
+    font-size: 1.18rem;
+    font-family: var(--font-regular, 'Open Sans', Arial, sans-serif);
+    font-style: italic;
+    color: var(--foundation-primary-blue-700, #27343e);
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+}
+
+.viva-cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 36px;
+}
+
+.viva-cta-col {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px; /* facilita o espaçamento entre botões */
+}
+
+.viva-cta-col .btn {
+    min-width: 122px;
+    font-size: 1.11rem;
+    margin-bottom: 0;
+    margin-right: 0;
+}
+
+.viva-img-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pets-img-cta {
+    max-width: 220px;
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+    box-shadow: 0 1px 12px rgba(180,140,25,0.12);
+    background: #fffbea;
+    object-fit: cover;
+}
+
+@media (max-width: 991px) {
+    .viva-cta-row {
+        flex-direction: column;
+        gap: 18px;
+        align-items: center;
+    }
+    .pets-img-cta {
+        max-width: 160px;
+    }
+    .viva-cta-col {
+        flex-direction: row;
+        margin-bottom: 0;
+    }
+}
+
+/* --- AQUI ESTÁ SUA MODIFICAÇÃO --- */
+@media (max-width: 600px) {
+    .pets-img-cta {
+        max-width: 100px;
+    }
+    .viva-cta-row {
+        gap: 8px;
+    }
+    /* Botões em coluna no mobile */
+    .viva-cta-col {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+    .viva-cta-col .btn {
+        width: 100%;
+        max-width: 260px;
+    }
+}

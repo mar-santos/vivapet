@@ -1,5 +1,5 @@
 # app/api/routes/usuario_routes.py
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from ...extensions import db
 from ...models.usuario import Usuario
 from ...services.user_service import UserService
@@ -9,6 +9,10 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 usuario_bp = Blueprint('usuarios', __name__)
 user_service = UserService()
+
+@usuario_bp.route('/cadastro')
+def cadastro():
+    return render_template('usuarios_cadastrar.html')
 
 @usuario_bp.route('/usuarios', methods=['GET'])
 @jwt_required()

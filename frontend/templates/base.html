@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Viva Pet{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='src/css/base.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- NAVBAR Viva Pet -->
+    <nav class="navbar navbar-expand-lg viva-navbar py-0">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center" href="/">
+            <div class="viva-logo-bg d-flex justify-content-center align-items-center me-2">
+              <img src="{{ url_for('static', filename='img/fi-rr-paw1.svg') }}" class="viva-icon" alt="Pata">
+            </div>
+            <span class="viva-brand">Viva Pet</span>
+          </a>
+          <!-- Botão Hamburger responsivo -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVivaPet" aria-controls="navbarVivaPet" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <!-- Menu recolhível -->
+          <div class="collapse navbar-collapse justify-content-end" id="navbarVivaPet">
+            <ul class="navbar-nav align-items-center viva-menu ms-auto mb-2 mb-lg-0">
+              <!-- Três primeiros itens -->
+              <li class="nav-item">
+                <a href="/agendamentos" class="nav-link">
+                  <span class="viva-btn">Agendamentos</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/pagamentos" class="nav-link">
+                  <span class="viva-btn">Pagamentos</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/listar" class="nav-link">
+                  <span class="viva-btn">Listar</span>
+                </a>
+              </li>
+              <!-- Barra vertical de separação -->
+              <li class="d-none d-md-block">
+                <div class="vr my-0 mx-2" style="height:36px;background-color:#fff;opacity:.5"></div>
+              </li>
+              <!-- Dois últimos itens -->
+              <li class="nav-item">
+                <a href="/api/cadastro" Cadastrarclass="nav-link">
+                  <span class="viva-btn">Cadastro</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/login" class="nav-link">
+                  <span class="viva-btn">Login</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+        <!-- BLOCO PRINCIPAL -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+    <!-- FOOTER Viva Pet -->
+    <footer class="viva-footer mt-auto text-center">
+        <div class="container py-3">
+          <span class="viva-copyright">Todos os direitos reservados</span>
+        </div>
+    </footer>
+    <!-- Bootstrap Bundle JS (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
