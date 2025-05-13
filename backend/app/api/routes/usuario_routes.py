@@ -1,4 +1,3 @@
-# app/api/routes/usuario_routes.py
 from flask import Blueprint, request, jsonify, render_template
 from ...extensions import db
 from ...models.usuario import Usuario
@@ -6,9 +5,16 @@ from ...services.user_service import UserService
 from ...utils.api_responses import success_response, error_response
 from ...utils.validators import validate_usuario
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.models.pet import Pet
+import logging
 
 usuario_bp = Blueprint('usuarios', __name__)
 user_service = UserService()
+logger = logging.getLogger(__name__)
+
+def str2bool(value):
+    """Converte 'true'/'false' (string) para booleano real."""
+    return str(value).lower() in ("true", "1", "yes", "on")
 
 @usuario_bp.route('/cadastro')
 def cadastro():
@@ -30,16 +36,37 @@ def get_usuario(id):
 
 @usuario_bp.route('/usuarios', methods=['POST'])
 def create_usuario():
-    """Cria um novo usuário."""
+    """Cria um novo usuário e seus pets."""
     data = request.form.to_dict()
     foto_user = request.files.get('foto_user')
-    
-    # Validação dos dados de entrada
+
+    logger.info(f"Dados recebidos na rota /usuarios (POST): {data}")
+
+    data['ativo'] = str2bool(data.get('ativo', False))
+    data['is_admin'] = str2bool(data.get('is_admin', False))
+
+    if foto_user:
+        data['foto_user'] = foto_user.read()
+
     is_valid, errors = validate_usuario(data)
     if not is_valid:
+        logger.warning(f"Dados de usuário inválidos: {errors}")
         return error_response('Dados de usuário inválidos', errors=errors, status_code=400)
-    
-    return user_service.create_usuario(data)
+
+    try:
+        usuario = user_service.create_usuario(data)
+        logger.info(f"Usuário criado com sucesso. ID: {usuario.id_usuario}")
+        return success_response(usuario.to_dict(include_pets=True), 'Usuário criado com sucesso', 201)
+
+    except ValueError as e:
+        db.session.rollback()
+        logger.error(f"Erro de validação ao criar usuário: {str(e)}")
+        return error_response(str(e), status_code=400)
+
+    except Exception as e:
+        db.session.rollback()
+        logger.exception(f"Erro inesperado ao criar usuário: {str(e)}")
+        return error_response(f'Erro ao criar usuário: {str(e)}', status_code=500)
 
 @usuario_bp.route('/usuarios/<int:id>', methods=['PUT'])
 @jwt_required()
@@ -47,7 +74,12 @@ def update_usuario(id):
     """Atualiza um usuário existente."""
     current_user_id = get_jwt_identity()
     data = request.get_json()
-    
+
+    if 'ativo' in data:
+        data['ativo'] = str2bool(data.get('ativo'))
+    if 'is_admin' in data:
+        data['is_admin'] = str2bool(data.get('is_admin'))
+
     return user_service.update_usuario(id, data, current_user_id)
 
 @usuario_bp.route('/usuarios/<int:id>', methods=['DELETE'])
@@ -57,23 +89,18 @@ def delete_usuario(id):
     current_user_id = get_jwt_identity()
     return user_service.delete_usuario(id, current_user_id)
 
-# Adicionar em app/api/routes/usuario_routes.py
 @usuario_bp.route('/usuarios/diagnostico', methods=['GET'])
 def diagnostico_db():
     """Rota temporária para diagnóstico do banco de dados."""
     import logging, time
     from flask import current_app
-    
+
     logger = logging.getLogger(__name__)
-    
+
     try:
-        # 1. Verificar configuração do banco de dados
         db_uri = current_app.config.get('SQLALCHEMY_DATABASE_URI', 'Não configurado')
-        
-        # 2. Contar registros na tabela usuário
         count = Usuario.query.count()
-        
-        # 3. Tentar criar um usuário de teste diretamente
+
         usuario_teste = Usuario(
             username=f"teste_{int(time.time())}",
             nome_user="Usuário Teste Diagnóstico",
@@ -83,17 +110,15 @@ def diagnostico_db():
             ativo=True
         )
         usuario_teste.senha = "teste123"
-        
+
         logger.info("Adicionando usuário de diagnóstico à sessão")
         db.session.add(usuario_teste)
-        
         logger.info("Executando commit de diagnóstico")
         db.session.commit()
-        
-        # 4. Verificar se foi criado
+
         id_teste = usuario_teste.id_usuario
         verificacao = Usuario.query.get(id_teste)
-        
+
         return jsonify({
             'status': 'success',
             'database': {

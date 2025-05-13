@@ -2,6 +2,7 @@
 {% block title %}Home | Viva Pet{% endblock %}
 
 {% block styles %}
+<!-- Bootstrap CSS deve ser carregado ANTES, já na base.html! -->
 <link rel="stylesheet" href="{{ url_for('static', filename='src/css/home.css') }}">
 {% endblock %}
 
@@ -10,18 +11,18 @@
     <section class="viva-hero text-center">
         <div class="viva-hero-logo">
             <div class="ellipse">
-                <img src="{{ url_for('static', filename='img/fi-rr-paw1.svg') }}" alt="Pata" class="paw-hero">
+                <img src="{{ url_for('static', filename='src/assets/images/icons8-paws-64.png') }}" alt="Pata" class="paw-hero">
             </div>
             <h1>Bem-vindo ao VivaPet</h1>
             <p class="subtitle">O melhor lugar para cuidar de seu pet!</p>
         </div>
-        <!-- Botões + Imagem dos Pets lado a lado (desktop), empilhados (mobile) -->
-        <div class="viva-cta-row d-flex align-items-center justify-content-center flex-wrap flex-md-nowrap my-4">
-            <div class="viva-cta-col text-center mb-3 mb-md-0">
+        <!-- Botões à esquerda + Imagem à direita -->
+        <div class="viva-cta-row my-4 flex-column align-items-center">
+            <div class="viva-cta-col text-center mb-3">
                 <a href="/login" class="btn viva-btn-login me-3">Login</a>
                 <a href="/usuarios_cadastrar" class="btn viva-btn-cadastro">Cadastrar-se</a>
             </div>
-            <div class="viva-cta-col viva-img-right ms-md-5">
+            <div class="viva-img-center">
                 <img src="{{ url_for('static', filename='src/assets/images/3719277.png') }}" alt="Pets felizes" class="pets-img-cta">
             </div>
         </div>
@@ -33,15 +34,19 @@
                 <h3 class="mb-2">Oferecemos serviços de qualidade para o seu animal de estimação.</h3>
             </div>
         </div>
-        <hr class="viva-separator">
+<br>
     </section>
 
     <div class="row viva-services justify-content-center mb-5">
         <!-- Cãominhadas -->
         <div class="col-md-3 viva-service-card">
             <div class="card h-100 service-catwalk">
-                <div class="card-body">
-                    <h4 class="card-title">Cãominhadas</h4>
+                <div class="card-body text-center">
+                    <h4 class="card-title">
+                        <img src="{{ url_for('static', filename='src/assets/images/imagem1.jpeg') }}" alt="Imagem 1" class="service-icon">
+                        <br>
+                        Cãominhadas
+                    </h4>
                     <p class="card-text">
                         As cãominhadas têm se tornado cada vez mais populares em áreas urbanas, fortalecendo o vínculo entre humanos e pets, promovendo um estilo de vida mais saudável para ambos.
                     </p>
@@ -51,8 +56,12 @@
         <!-- Creche -->
         <div class="col-md-3 viva-service-card">
             <div class="card h-100 service-creche">
-                <div class="card-body">
-                    <h4 class="card-title">Creche</h4>
+                <div class="card-body text-center">
+                    <h4 class="card-title">
+                        <img src="{{ url_for('static', filename='src/assets/images/imagem2.jpeg') }}" alt="Imagem 2" class="service-icon">
+                        <br>
+                        Creche
+                    </h4>
                     <p class="card-text">
                         A creche para pets oferece um ambiente seguro e estimulante para cães enquanto os tutores trabalham, com atenção personalizada e atividades sob supervisão profissional.
                     </p>
@@ -62,25 +71,19 @@
         <!-- Hospedagem -->
         <div class="col-md-3 viva-service-card">
             <div class="card h-100 service-hospedagem">
-                <div class="card-body">
-                    <h4 class="card-title">Hospedagem</h4>
+                <div class="card-body text-center">
+                    <h4 class="card-title">
+                        <img src="{{ url_for('static', filename='src/assets/images/imagem3.jpeg') }}" alt="Imagem 3" class="service-icon">
+                        <br>
+                        Hospedagem
+                    </h4>
                     <p class="card-text">
                         Espaço confortável, seguro e com supervisão constante para seu pet se sentir em casa enquanto você viaja.
                     </p>
                 </div>
             </div>
         </div>
-        <!-- Segurança -->
-        <div class="col-md-3 viva-service-card">
-            <div class="card h-100 service-seguranca">
-                <div class="card-body">
-                    <h4 class="card-title">Segurança</h4>
-                    <p class="card-text">
-                        Segurança total para você e seu pet. Atendimento especializado todos os dias para garantir bem-estar e tranquilidade em todas as situações.
-                    </p>
-                </div>
-            </div>
-        </div>
+    </div>
     </div>
 </div>
 {% endblock %}

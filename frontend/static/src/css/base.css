@@ -18,13 +18,13 @@
     --font-inter: 'Inter', Arial, sans-serif;
 }
 
-body {
-    background: #f7aa26;
+body, html {
     font-family: var(--font-regular);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     color: var(--foundation-neutrals-neutrals-900, #171f25);
+    background: linear-gradient(135deg, #f8e4a4 0%, #f9baba 100%) no-repeat fixed;
 }
 
 /* Navbar adaptada */

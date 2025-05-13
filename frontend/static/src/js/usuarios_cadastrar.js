@@ -27,12 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const formData = new FormData(form);
 
-            // Garantir envio de string "true"/"false" (consistente com backend em Python)
-            formData.set('ativo', form.ativo.checked ? "true" : "false");
-            formData.set('is_admin', form.is_admin.checked ? "true" : "false");
-
             try {
-                const resp = await fetch('/api/usuarios', {   // ← AQUI FOI CORRIGIDO!
+                const resp = await fetch('http://localhost:5000/api/usuarios', {
                     method: 'POST',
                     body: formData
                 });
@@ -42,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     messageDiv.textContent = "Usuário cadastrado com sucesso!";
                     form.reset();
 
-                    // Limpa a imagem de preview e o campo de upload de foto
                     if (avatarPreview) {
                         avatarPreview.src = defaultAvatar;
                     }

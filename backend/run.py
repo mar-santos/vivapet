@@ -1,13 +1,13 @@
-# run.py
+#run.py
 from app import create_app, db
 import logging
 import os
 from pathlib import Path
 from flask import Flask
-import shutil
+from flask_cors import CORS
 
 # Configurar o logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Garantir que o diretório instance exista com o caminho absoluto correto
@@ -42,6 +42,9 @@ def reset_db():
 # Criar a aplicação
 app = create_app()
 
+# Configurar o CORS
+CORS(app, resources={r"/*": {"origins": "*"}})  # Permite CORS para todas as rotas
+
 # Função para inicializar o banco de dados
 def init_db():
     """Cria o banco de dados e tabelas e insere dados iniciais"""
@@ -50,40 +53,6 @@ def init_db():
     # Verificar o URI do banco de dados configurado
     db_uri = app.config['SQLALCHEMY_DATABASE_URI']
     logger.info(f"URI do banco de dados: {db_uri}")
-    
-    # Importar todos os modelos para garantir que sejam registrados
-    try:
-        # Importação explícita de todos os modelos
-        from app.models.usuario import Usuario
-        from app.models.pet import Pet
-        from app.models.servico import Servico
-        from app.models.agendamento import Agendamento
-        from app.models.pagamento import Pagamento
-        
-        # Verifica se o modelo AgendamentoServico existe e o importa
-        try:
-            from app.models.agendamento_servico import AgendamentoServico
-            logger.info("Modelo AgendamentoServico importado com sucesso")
-        except ImportError:
-            logger.warning("Modelo AgendamentoServico não encontrado - será necessário criá-lo")
-        
-        logger.info("Todos os modelos importados com sucesso")
-    except ImportError as e:
-        logger.warning(f"Alguns modelos podem não ter sido importados: {str(e)}")
-    
-    # Se for SQLite, verificar o caminho do arquivo
-    db_path = None
-    if db_uri.startswith('sqlite:///'):
-        db_path = db_uri.replace('sqlite:///', '')
-        if not db_path.startswith('/'):
-            # Caminho relativo - converter para absoluto para logging
-            abs_db_path = os.path.join(os.getcwd(), db_path)
-            logger.info(f"Caminho do banco de dados SQLite: {abs_db_path}")
-            # Verificar se o diretório pai existe
-            db_dir = os.path.dirname(abs_db_path)
-            if not os.path.exists(db_dir):
-                os.makedirs(db_dir)
-                logger.info(f"Diretório para banco de dados criado: {db_dir}")
     
     with app.app_context():
         try:
@@ -142,6 +111,7 @@ def init_db():
                 logger.error("Tentando reiniciar o banco de dados...")
                 
                 # Se o banco de dados já existe, tenta remover e criar novamente
+                db_path = os.path.join(INSTANCE_DIR, 'dbVivapet.db')
                 if db_path and os.path.exists(db_path):
                     try:
                         os.remove(db_path)
@@ -160,7 +130,8 @@ if __name__ == '__main__':
     
     # Evita recriar o banco de dados em reinicializações do modo debug
     import sys
-    if not os.path.exists(os.path.join(INSTANCE_DIR, 'dbVivapet.db')) or '--force-init-db' in sys.argv:
+    db_path = os.path.join(INSTANCE_DIR, 'dbVivapet.db')
+    if not os.path.exists(db_path) or '--force-init-db' in sys.argv:
         reset_db()
         success = init_db()
     else:
