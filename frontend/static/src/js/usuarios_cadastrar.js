@@ -36,6 +36,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (resp.ok) {
                     messageDiv.style.color = "#0c8b45";
                     messageDiv.textContent = "Usuário cadastrado com sucesso!";
+                    
+                    // Redireciona para a página de login após um pequeno atraso (opcional)
+                    setTimeout(() => {
+                        window.location.href = "/login";;
+                    }, 2000);
+
                     form.reset();
 
                     if (avatarPreview) {

@@ -31,7 +31,7 @@ def novo_pet():
 # Rota para login
 @app.route('/login')
 def login():
-    return render_template('pages/login.html')
+    return render_template('login.html')
 
 # Rota para cadastro de usuários
 @app.route('/usuarios_cadastrar')

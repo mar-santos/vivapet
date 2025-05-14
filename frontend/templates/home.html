@@ -19,8 +19,8 @@
         <!-- Botões à esquerda + Imagem à direita -->
         <div class="viva-cta-row my-4 flex-column align-items-center">
             <div class="viva-cta-col text-center mb-3">
-                <a href="/login" class="btn viva-btn-login me-3">Login</a>
-                <a href="/usuarios_cadastrar" class="btn viva-btn-cadastro">Cadastrar-se</a>
+                <a href="{{ url_for('login') }}" class="btn viva-btn-login me-3">Login</a>
+                <a href="{{ url_for('usuarios_cadastrar') }}" class="btn viva-btn-cadastro">Cadastrar-se</a>
             </div>
             <div class="viva-img-center">
                 <img src="{{ url_for('static', filename='src/assets/images/3719277.png') }}" alt="Pets felizes" class="pets-img-cta">
@@ -83,7 +83,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
 {% endblock %}

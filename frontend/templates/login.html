@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Viva Pet{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='src/css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="vivapet-cadastro-bg">
+    <div class="login-container vivapet-cadastro-card">
+        <form class="login-form">
+            <div class="vivapet-cadastro-header d-flex align-items-center">
+                <div class="vivapet-cadastro-logo">
+                    <img src="{{ url_for('static', filename='src/assets/images/logotipo.png') }}" class="logo-img" alt="Logo">
+                </div>
+                <div class="vivapet-cadastro-title ms-3">Login</div>
+            </div>
+            <br>
+            <input type="text" id="username" class="form-control" placeholder="Username" required>
+            <input type="password" id="senha" class="form-control" placeholder="Senha" required>
+            <button type="submit" class="vivapet-btn">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const loginForm = document.querySelector('.login-form');
+
+        loginForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const senha = document.getElementById('senha').value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, senha })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Login realizado com sucesso!");
+                    localStorage.setItem('access_token', data.access_token);
+                    window.location.href = "/dashboard";
+                } else {
+                    alert(`Erro: ${data.message}`);
+                    console.error('Erro:', data.message);
+                }
+            } catch (error) {
+                alert('Erro ao tentar fazer login.');
+                console.error('Erro:', error);
+            }
+        });
+    });
+</script>
+{% endblock %}

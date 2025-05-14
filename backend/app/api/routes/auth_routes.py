@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 auth_bp = Blueprint('auth', __name__)
 auth_service = AuthService()
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """Endpoint para autenticar um usuário."""
     data = request.get_json()

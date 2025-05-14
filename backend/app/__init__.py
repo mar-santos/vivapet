@@ -47,6 +47,7 @@ def register_blueprints(app):
             pagamento_routes
         )
         
+        print("Registrando blueprint de auth")
         app.register_blueprint(auth_routes.auth_bp, url_prefix='/api')
         app.register_blueprint(usuario_routes.usuario_bp, url_prefix='/api')
         app.register_blueprint(pet_routes.pet_bp, url_prefix='/api')

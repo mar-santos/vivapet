@@ -23,15 +23,21 @@ body, html {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    margin: 0; /* Remove margens para ajustar a altura corretamente */
+    padding-top: 80px; /* Previne conteúdo por trás da navbar */
     color: var(--foundation-neutrals-neutrals-900, #171f25);
     background: linear-gradient(135deg, #f8e4a4 0%, #f9baba 100%) no-repeat fixed;
 }
 
 /* Navbar adaptada */
 .viva-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
     background: var(--color-bg-navbar);
     min-height: 80px;
     box-shadow: 0 1px 0 0 #e0e0e0;
+    z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
 }
 
 .viva-logo-bg {
